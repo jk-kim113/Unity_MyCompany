@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System;
 using System.Runtime.InteropServices;
+using System.IO;
 
 public class ClientManager : MonoBehaviour
 {
@@ -70,25 +71,57 @@ public class ClientManager : MonoBehaviour
         {
             if (_isConnect && _server != null && _server.Poll(0, SelectMode.SelectRead))
             {
-                byte[] buffer = new byte[1032];
-                Debug.Log("데이터 들어온다. 입벌려");
-                int recvLen = _server.Receive(buffer);
-                if (recvLen > 0)
+                try
                 {
-                    try
-                    {
-                        DefinedStructure.PacketInfo pToClient = new DefinedStructure.PacketInfo();
-                        pToClient = (DefinedStructure.PacketInfo)ConvertPacket.ByteArrayToStructure(buffer, pToClient.GetType(), recvLen);
+                    Debug.Log("사진 받아오는 중");
+                    int total = 0;
+                    int size = 0;
+                    int left_data = 0;
+                    int recv_data = 0;
 
-                        Debug.Log("Receive Packet");
-                        _toClientQueue.Enqueue(pToClient);
-                    }
-                    catch (NullReferenceException ex)
+                    //byte[] data_size = new byte[4];
+                    //recv_data = _server.Receive(data_size, 0, 4, SocketFlags.None);
+                    //size = BitConverter.ToInt32(data_size, 0);
+
+                    left_data = 21717;
+                    byte[] data = new byte[21717];
+
+                    while (total < size)
                     {
-                        Debug.LogWarning(ex.Message);
-                        Debug.LogWarning(ex.StackTrace);
+                        recv_data = _server.Receive(data, total, left_data, 0);
+                        if (recv_data == 0)
+                            break;
+                        total += recv_data;
+                        left_data -= recv_data;
                     }
+
+                    File.WriteAllBytes(Application.dataPath + "\\Test.png", data);
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+
+                //byte[] buffer = new byte[1024];
+                //int recvLen = _server.Receive(buffer);
+                //Debug.Log(recvLen);
+                //if (recvLen > 0)
+                //{
+                //    try
+                //    {
+                //        DefinedStructure.PacketInfo pToClient = new DefinedStructure.PacketInfo();
+                //        pToClient = (DefinedStructure.PacketInfo)ConvertPacket.ByteArrayToStructure(buffer, pToClient.GetType(), recvLen);
+
+                //        Debug.Log("Receive Packet");
+                //        _toClientQueue.Enqueue(pToClient);
+                //    }
+                //    catch (NullReferenceException ex)
+                //    {
+                //        Debug.LogWarning(ex.Message);
+                //        Debug.LogWarning(ex.StackTrace);
+                //    }
+                //}
             }
 
             yield return null;
