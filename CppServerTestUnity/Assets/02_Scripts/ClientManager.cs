@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
 using System;
-using System.Runtime.InteropServices;
 using System.IO;
 
 public class ClientManager : MonoBehaviour
@@ -29,11 +28,36 @@ public class ClientManager : MonoBehaviour
 
     private void Start()
     {
-        ConnectServer();
+        //ConnectServer();
 
-        StartCoroutine(AddOrder());
-        StartCoroutine(DoOrder());
-        StartCoroutine(SendOrder());
+        //StartCoroutine(AddOrder());
+        //StartCoroutine(DoOrder());
+        //StartCoroutine(SendOrder());
+
+        var fileStream = new FileStream(Path.Combine(Application.dataPath, "1_triceratops"), FileMode.Open, FileAccess.Read);
+
+        if (fileStream == null)
+            Debug.Log("Failed to Access File Stream");
+
+        AssetBundle assetbundle = AssetBundle.LoadFromFile(Path.Combine(Application.dataPath + "/", "1_triceratops"));
+
+        GameObject prefab = assetbundle.LoadAsset<GameObject>("1_triceratops");
+        Instantiate(prefab);
+
+        //var bundleLoadRequest = AssetBundle.LoadFromStreamAsync(fileStream);
+
+        //var myLoadedAssetBundle = bundleLoadRequest.assetBundle;
+        //if (myLoadedAssetBundle == null)
+        //{
+        //    Debug.Log("Failed to load AssetBundle!");
+        //}
+
+        //var assetLoadRequest = myLoadedAssetBundle.LoadAssetAsync<GameObject>("1_triceratops");
+
+        //GameObject prefab = assetLoadRequest.asset as GameObject;
+        //Instantiate(prefab);
+
+        //myLoadedAssetBundle.Unload(false);
     }
 
     public void ConnectServer()
@@ -83,8 +107,8 @@ public class ClientManager : MonoBehaviour
                     //recv_data = _server.Receive(data_size, 0, 4, SocketFlags.None);
                     //size = BitConverter.ToInt32(data_size, 0);
 
-                    left_data = 21717;
-                    byte[] data = new byte[21717];
+                    left_data = 2168368;
+                    byte[] data = new byte[2168368];
 
                     while (total < size)
                     {
@@ -95,7 +119,8 @@ public class ClientManager : MonoBehaviour
                         left_data -= recv_data;
                     }
 
-                    File.WriteAllBytes(Application.dataPath + "\\Test.png", data);
+                    File.WriteAllBytes(Application.dataPath + "\\TestPrefab", data);
+                    Debug.Log("Finish Download");
                 }
                 catch (Exception ex)
                 {
