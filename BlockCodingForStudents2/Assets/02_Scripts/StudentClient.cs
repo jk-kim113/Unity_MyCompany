@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Net;
 using System.Net.Sockets;
 using System;
 
-public class TeacherClient : MonoBehaviour
+public class StudentClient : MonoBehaviour
 {
-    static TeacherClient _uniqueInstance;
-    public static TeacherClient _instance { get { return _uniqueInstance; } }
+    static StudentClient _uniqueInstance;
+    public static StudentClient _instance { get { return _uniqueInstance; } }
 
     const string _ip = "192.168.0.52";
     //const string _ip = "203.248.252.2";
@@ -102,7 +101,7 @@ public class TeacherClient : MonoBehaviour
 
                 switch ((DefinedProtocol.eToClient)pToClient._id)
                 {
-                    
+
                 }
             }
 
@@ -121,14 +120,15 @@ public class TeacherClient : MonoBehaviour
         }
     }
 
-    public void SendClientInfo(int schoolID, int grade, int group)
+    public void SendClientInfo(int schoolID, int grade, int group, int number)
     {
-        DefinedStructure.P_ClientInfo pClientInfo;
-        pClientInfo._schoolID = schoolID + 100000;
-        pClientInfo._grade = grade;
-        pClientInfo._group = group;
+        DefinedStructure.P_StudentInfo pStudentInfo;
+        pStudentInfo._schoolID = schoolID + 100000;
+        pStudentInfo._grade = grade;
+        pStudentInfo._group = group;
+        pStudentInfo._number = number;
 
-        ToPacket(DefinedProtocol.eFromClient.ClientInfo, pClientInfo);
+        ToPacket(DefinedProtocol.eFromClient.StudentInfo, pStudentInfo);
     }
 
     void ToPacket(DefinedProtocol.eFromClient fromClientID, object str)

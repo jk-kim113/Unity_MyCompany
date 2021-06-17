@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TeacherMainUI : MonoBehaviour
+public class StudentMainUI : MonoBehaviour
 {
     public enum eSchoolName
     {
@@ -21,6 +21,8 @@ public class TeacherMainUI : MonoBehaviour
     InputField _gradeInputField;
     [SerializeField]
     InputField _groupInputField;
+    [SerializeField]
+    InputField _numberInputField;
 
     private void Start()
     {
@@ -35,9 +37,10 @@ public class TeacherMainUI : MonoBehaviour
 
     public void EnterBtn()
     {
-        if(!string.IsNullOrEmpty(_gradeInputField.text) && !string.IsNullOrEmpty(_groupInputField.text))
+        if (!string.IsNullOrEmpty(_gradeInputField.text) && !string.IsNullOrEmpty(_groupInputField.text) && !string.IsNullOrEmpty(_numberInputField.text))
         {
-            TeacherClient._instance.SendClientInfo(_schoolListDropdown.value, int.Parse(_gradeInputField.text), int.Parse(_groupInputField.text));
+            StudentClient._instance.SendClientInfo(_schoolListDropdown.value, int.Parse(_gradeInputField.text), int.Parse(_groupInputField.text),
+                int.Parse(_numberInputField.text));
         }
     }
 }
