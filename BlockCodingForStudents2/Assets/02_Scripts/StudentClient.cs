@@ -99,10 +99,10 @@ public class StudentClient : MonoBehaviour
             {
                 DefinedStructure.PacketInfo pToClient = _toClientQueue.Dequeue();
 
-                switch ((DefinedProtocol.eToClient)pToClient._id)
-                {
+                //switch ((DefinedProtocol.eToClient)pToClient._id)
+                //{
 
-                }
+                //}
             }
 
             yield return null;

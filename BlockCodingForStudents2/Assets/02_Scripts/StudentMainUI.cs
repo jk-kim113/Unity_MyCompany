@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class StudentMainUI : MonoBehaviour
 {
+    static StudentMainUI _uniqueInstance;
+    public static StudentMainUI _instance { get { return _uniqueInstance; } }
+
     public enum eSchoolName
     {
         중동고등학교,
@@ -24,6 +27,20 @@ public class StudentMainUI : MonoBehaviour
     [SerializeField]
     InputField _numberInputField;
 
+    [SerializeField]
+    Animator _explainPanelAnim;
+    [SerializeField]
+    GameObject _initSetting;
+    [SerializeField]
+    GameObject _gameListGroup;
+
+    public GameObject _InitSettingObj { get { return _initSetting; } }
+
+    private void Awake()
+    {
+        _uniqueInstance = this;
+    }
+
     private void Start()
     {
         List<string> temp = new List<string>();
@@ -33,6 +50,9 @@ public class StudentMainUI : MonoBehaviour
 
         _schoolListDropdown.ClearOptions();
         _schoolListDropdown.AddOptions(temp);
+
+        _initSetting.SetActive(false);
+        _gameListGroup.SetActive(false);
     }
 
     public void EnterBtn()
@@ -42,5 +62,10 @@ public class StudentMainUI : MonoBehaviour
             StudentClient._instance.SendClientInfo(_schoolListDropdown.value, int.Parse(_gradeInputField.text), int.Parse(_groupInputField.text),
                 int.Parse(_numberInputField.text));
         }
+    }
+
+    public void MoveExplainPanel()
+    {
+        _explainPanelAnim.SetTrigger("IsMove");
     }
 }
