@@ -7,12 +7,14 @@ public class DefinedProtocol
     public enum eFromClient
     {
         StudentInfo = 100,
+        UUIDInfo,
 
         max
     }
 
     public enum eToClient
     {
+        MyUUID,
 
         max
     }

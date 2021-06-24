@@ -7,7 +7,15 @@ using System;
 
 public class PlatformManager : MonoBehaviour
 {
+    static PlatformManager _uniqueInstance;
+    public static PlatformManager _instance { get { return _uniqueInstance; } }
+
     LogInInfo _loginInfo;
+
+    private void Awake()
+    {
+        _uniqueInstance = this;
+    }
 
     private void Start()
     {
@@ -27,20 +35,20 @@ public class PlatformManager : MonoBehaviour
 
             _loginInfo = (LogInInfo)formatter.Deserialize(stream);
             stream.Close();
+
+            StudentClient._instance.SendUUIDInfo(_loginInfo._myUUID);
         }
         else
-        {
-            // 최초 로그인
-            //_loginInfo = new LogInInfo();
-            //_loginInfo._myUUID = 10000;
-            //SaveData();
-
+        {   
             StudentMainUI._instance._InitSettingObj.SetActive(true);
         }
     }
 
-    void SaveData()
+    public void SaveData(int uuid)
     {
+        _loginInfo = new LogInInfo();
+        _loginInfo._myUUID = uuid;
+
         BinaryFormatter formatter = new BinaryFormatter();
         MemoryStream stream = new MemoryStream();
 
@@ -50,11 +58,13 @@ public class PlatformManager : MonoBehaviour
 
         PlayerPrefs.SetString("MyUUID", data);
         stream.Close();
+
+        StudentMainUI._instance.ShowGameList();
     }
 
     [Serializable]
     internal class LogInInfo
     {
-        public long _myUUID;
+        public int _myUUID;
     }
 }

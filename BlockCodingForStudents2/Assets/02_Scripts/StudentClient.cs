@@ -99,10 +99,17 @@ public class StudentClient : MonoBehaviour
             {
                 DefinedStructure.PacketInfo pToClient = _toClientQueue.Dequeue();
 
-                //switch ((DefinedProtocol.eToClient)pToClient._id)
-                //{
+                switch ((DefinedProtocol.eToClient)pToClient._id)
+                {
+                    case DefinedProtocol.eToClient.MyUUID:
 
-                //}
+                        DefinedStructure.P_MyUUID pMyUUID = new DefinedStructure.P_MyUUID();
+                        pMyUUID = (DefinedStructure.P_MyUUID)ConvertPacket.ByteArrayToStructure(pToClient._data, pMyUUID.GetType(), pToClient._totalSize);
+
+                        PlatformManager._instance.SaveData(pMyUUID._myUUID);
+
+                        break;
+                }
             }
 
             yield return null;
@@ -129,6 +136,14 @@ public class StudentClient : MonoBehaviour
         pStudentInfo._number = number;
 
         ToPacket(DefinedProtocol.eFromClient.StudentInfo, pStudentInfo);
+    }
+
+    public void SendUUIDInfo(int uuid)
+    {
+        DefinedStructure.P_MyUUID pMyUUID;
+        pMyUUID._myUUID = uuid;
+
+        ToPacket(DefinedProtocol.eFromClient.UUIDInfo, pMyUUID);
     }
 
     void ToPacket(DefinedProtocol.eFromClient fromClientID, object str)

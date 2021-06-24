@@ -68,4 +68,10 @@ public class StudentMainUI : MonoBehaviour
     {
         _explainPanelAnim.SetTrigger("IsMove");
     }
+
+    public void ShowGameList()
+    {
+        _initSetting.SetActive(false);
+        _gameListGroup.SetActive(true);
+    }
 }

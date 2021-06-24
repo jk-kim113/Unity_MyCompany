@@ -28,4 +28,11 @@ public class DefinedStructure
         [MarshalAs(UnmanagedType.I4)]
         public int _number;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_MyUUID
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        public int _myUUID;
+    }
 }
