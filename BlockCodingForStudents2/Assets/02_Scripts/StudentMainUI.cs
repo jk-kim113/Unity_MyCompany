@@ -30,9 +30,13 @@ public class StudentMainUI : MonoBehaviour
     [SerializeField]
     Animator _explainPanelAnim;
     [SerializeField]
+    Animator _systemMessageAnim;
+    [SerializeField]
     GameObject _initSetting;
     [SerializeField]
     GameObject _gameListGroup;
+    [SerializeField]
+    PersonalInfo _personalInfo;
 
     public GameObject _InitSettingObj { get { return _initSetting; } }
 
@@ -61,17 +65,53 @@ public class StudentMainUI : MonoBehaviour
         {
             StudentClient._instance.SendClientInfo(_schoolListDropdown.value, int.Parse(_gradeInputField.text), int.Parse(_groupInputField.text),
                 int.Parse(_numberInputField.text));
+
+            _personalInfo.InitPersonalInfo(_schoolListDropdown.options[_schoolListDropdown.value].ToString(), int.Parse(_gradeInputField.text), int.Parse(_groupInputField.text),
+                int.Parse(_numberInputField.text));
         }
     }
 
-    public void MoveExplainPanel()
+    public void MoveExplainPanel(int gameIndex)
     {
+        if(gameIndex >= 0)
+        {
+            ExplainPanel ep = _explainPanelAnim.gameObject.GetComponent<ExplainPanel>();
+            GameListGroup gameListGroup = _gameListGroup.GetComponent<GameListGroup>();
+            ep.InitPanel(gameListGroup._GameImageArr[gameIndex], "a");
+        }
+
         _explainPanelAnim.SetTrigger("IsMove");
+    }
+
+    public void MoveSystemMessage(int game, int level)
+    {
+        SystemMessage sm = _systemMessageAnim.gameObject.GetComponent<SystemMessage>();
+        sm.ShowGameTitle(game, level);
+
+        _systemMessageAnim.SetTrigger("IsMove");
     }
 
     public void ShowGameList()
     {
         _initSetting.SetActive(false);
         _gameListGroup.SetActive(true);
+    }
+
+    public void DownGame(int game, int level)
+    {
+        GameListGroup gameListGroup = _gameListGroup.GetComponent<GameListGroup>();
+        gameListGroup.DownGameContent(game, level);
+    }
+
+    public void StartDownGame()
+    {
+        _systemMessageAnim.SetTrigger("IsMove");
+        GameListGroup gameListGroup = _gameListGroup.GetComponent<GameListGroup>();
+        gameListGroup.StartDownGame();
+    }
+
+    public void ShowPersonalInfo()
+    {
+
     }
 }

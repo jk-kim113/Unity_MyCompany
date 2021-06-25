@@ -35,4 +35,26 @@ public class DefinedStructure
         [MarshalAs(UnmanagedType.I4)]
         public int _myUUID;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_DownGameInfo
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        public int _gameIndex;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _level;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_SuccessLogIn
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        public int _schoolID;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _grade;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _group;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _number;
+    }
 }

@@ -15,6 +15,8 @@ public class DefinedProtocol
     public enum eToClient
     {
         MyUUID,
+        DownGameInfo,
+        SuccessLogIn,
 
         max
     }

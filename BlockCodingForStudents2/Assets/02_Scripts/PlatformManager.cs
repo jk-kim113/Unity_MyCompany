@@ -11,6 +11,7 @@ public class PlatformManager : MonoBehaviour
     public static PlatformManager _instance { get { return _uniqueInstance; } }
 
     LogInInfo _loginInfo;
+    DownGameInfo _downGameInfo;
 
     private void Awake()
     {
@@ -21,10 +22,10 @@ public class PlatformManager : MonoBehaviour
     {
         //PlayerPrefs.DeleteAll();
 
-        CheckData();
+        //CheckData();
     }
 
-    void CheckData()
+    public void CheckData()
     {
         string data = PlayerPrefs.GetString("MyUUID");
 
@@ -62,9 +63,50 @@ public class PlatformManager : MonoBehaviour
         StudentMainUI._instance.ShowGameList();
     }
 
+    public void CheckGameList()
+    {
+        string data = PlayerPrefs.GetString("MyGameList");
+
+        if (!string.IsNullOrEmpty(data))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream(Convert.FromBase64String(data));
+
+            _downGameInfo = (DownGameInfo)formatter.Deserialize(stream);
+            stream.Close();
+
+            
+        }
+        else
+        {
+            
+        }
+    }
+
+    public void SaveGameList(int gameIndex, int gameLevel)
+    {
+        GameInfo gameInfo;
+        gameInfo._gameIndex = gameIndex;
+        gameInfo._gameLevel = gameLevel;
+
+        //_downGameInfo._downList.Add()
+    }
+
     [Serializable]
     internal class LogInInfo
     {
         public int _myUUID;
+    }
+
+    [Serializable]
+    internal class DownGameInfo
+    {
+        public List<GameInfo> _downList;
+    }
+
+    internal struct GameInfo
+    {
+        public int _gameIndex;
+        public int _gameLevel;
     }
 }

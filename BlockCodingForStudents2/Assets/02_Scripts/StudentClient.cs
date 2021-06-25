@@ -28,6 +28,8 @@ public class StudentClient : MonoBehaviour
     private void Start()
     {
         ConnectServer();
+
+        PlatformManager._instance.CheckData();
     }
 
     public void ConnectServer()
@@ -109,6 +111,27 @@ public class StudentClient : MonoBehaviour
                         PlatformManager._instance.SaveData(pMyUUID._myUUID);
 
                         break;
+
+                    case DefinedProtocol.eToClient.DownGameInfo:
+
+                        DefinedStructure.P_DownGameInfo pDownGameInfo = new DefinedStructure.P_DownGameInfo();
+                        pDownGameInfo = (DefinedStructure.P_DownGameInfo)ConvertPacket.ByteArrayToStructure(pToClient._data, pDownGameInfo.GetType(), pToClient._totalSize);
+
+                        StudentMainUI._instance.MoveSystemMessage(pDownGameInfo._gameIndex, pDownGameInfo._level);
+                        StudentMainUI._instance.DownGame(pDownGameInfo._gameIndex, pDownGameInfo._level);
+
+                        break;
+
+                    case DefinedProtocol.eToClient.SuccessLogIn:
+
+                        DefinedStructure.P_SuccessLogIn pSuccessLogIn = new DefinedStructure.P_SuccessLogIn();
+                        pSuccessLogIn = (DefinedStructure.P_SuccessLogIn)ConvertPacket.ByteArrayToStructure(pToClient._data, pSuccessLogIn.GetType(), pToClient._totalSize);
+
+
+
+                        StudentMainUI._instance.ShowGameList();
+
+                        break;
                 }
             }
 
@@ -142,7 +165,7 @@ public class StudentClient : MonoBehaviour
     {
         DefinedStructure.P_MyUUID pMyUUID;
         pMyUUID._myUUID = uuid;
-
+        
         ToPacket(DefinedProtocol.eFromClient.UUIDInfo, pMyUUID);
     }
 
