@@ -38,11 +38,21 @@ public class StudentMainUI : MonoBehaviour
     [SerializeField]
     PersonalInfo _personalInfo;
 
+    [SerializeField]
+    GameObject _loadingUIObj;
+    [SerializeField]
+    GameObject _blindImgObj;
+
+    public GameObject _BlindImgObj { get { return _blindImgObj; } }
+
     public GameObject _InitSettingObj { get { return _initSetting; } }
 
     private void Awake()
     {
         _uniqueInstance = this;
+
+        Screen.orientation = ScreenOrientation.Portrait;
+        _blindImgObj.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -56,7 +66,7 @@ public class StudentMainUI : MonoBehaviour
         _schoolListDropdown.AddOptions(temp);
 
         _initSetting.SetActive(false);
-        _gameListGroup.SetActive(false);
+        _gameListGroup.SetActive(true);
     }
 
     public void EnterBtn()
@@ -113,5 +123,13 @@ public class StudentMainUI : MonoBehaviour
     public void ShowPersonalInfo()
     {
 
+    }
+
+    public LoadingUI GetUI(Transform myTr)
+    {
+        LoadingUI wnd = Instantiate(_loadingUIObj, myTr).GetComponent<LoadingUI>();
+        wnd.OpenLoadingWnd();
+
+        return wnd;
     }
 }

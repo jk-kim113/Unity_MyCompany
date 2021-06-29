@@ -9,6 +9,13 @@ public class ExplainPanel : MonoBehaviour
     Image _gameIcon;
     [SerializeField]
     Text _gameExplainTxt;
+    [SerializeField]
+    Button _gameStartBtn;
+
+    private void Start()
+    {
+        _gameStartBtn.onClick.AddListener(() => { SceneControlManager._instance.StartLoadTestScene(); });
+    }
 
     public void InitPanel(Sprite icon, string txt)
     {

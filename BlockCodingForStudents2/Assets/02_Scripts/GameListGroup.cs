@@ -35,6 +35,22 @@ public class GameListGroup : MonoBehaviour
     int _currentDownGame;
     int _currnentDownGameLevel;
 
+    private void Start()
+    {
+        // 임시 조치
+        _currentDownGame = 0;
+        GameContent gameContent = Instantiate(_gameContentObj, _scorllTargetPosArr[0]).GetComponent<GameContent>();
+        gameContent.InitContent(_gameImageArr[_currentDownGame], ((eGameName)_currentDownGame).ToString(), _currentDownGame, _currnentDownGameLevel);
+
+        _currentDownGame = 1;
+        gameContent = Instantiate(_gameContentObj, _scorllTargetPosArr[1]).GetComponent<GameContent>();
+        gameContent.InitContent(_gameImageArr[_currentDownGame], ((eGameName)_currentDownGame).ToString(), _currentDownGame, _currnentDownGameLevel);
+
+        _currentDownGame = 2;
+        gameContent = Instantiate(_gameContentObj, _scorllTargetPosArr[2]).GetComponent<GameContent>();
+        gameContent.InitContent(_gameImageArr[_currentDownGame], ((eGameName)_currentDownGame).ToString(), _currentDownGame, _currnentDownGameLevel);
+    }
+
     public void DownGameContent(int game, int level)
     {
         _currentDownGame = game;

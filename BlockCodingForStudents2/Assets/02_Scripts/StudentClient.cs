@@ -27,9 +27,9 @@ public class StudentClient : MonoBehaviour
 
     private void Start()
     {
-        ConnectServer();
+        //ConnectServer();
 
-        PlatformManager._instance.CheckData();
+        //PlatformManager._instance.CheckData();
     }
 
     public void ConnectServer()
