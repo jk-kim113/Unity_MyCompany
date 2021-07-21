@@ -28,7 +28,7 @@ public class TeacherClient : MonoBehaviour
 
     private void Start()
     {
-        ConnectServer();
+        //ConnectServer();
     }
 
     public void ConnectServer()
@@ -100,10 +100,10 @@ public class TeacherClient : MonoBehaviour
             {
                 DefinedStructure.PacketInfo pToClient = _toClientQueue.Dequeue();
 
-                switch ((DefinedProtocol.eToClient)pToClient._id)
-                {
+                //switch ((DefinedProtocol.eToClient)pToClient._id)
+                //{
                     
-                }
+                //}
             }
 
             yield return null;

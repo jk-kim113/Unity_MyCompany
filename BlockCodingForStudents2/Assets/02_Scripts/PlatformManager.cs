@@ -25,6 +25,15 @@ public class PlatformManager : MonoBehaviour
         //CheckData();
     }
 
+    public void TempBtn()
+    {
+        int gameID = UnityEngine.Random.Range(0, 4);
+        int level = UnityEngine.Random.Range(1, 4);
+
+        StudentMainUI._instance.MoveSystemMessage(gameID, level);
+        StudentMainUI._instance.DownGame(gameID, level);
+    }
+
     public void CheckData()
     {
         string data = PlayerPrefs.GetString("MyUUID");

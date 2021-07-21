@@ -3,41 +3,168 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class StudentInfo
+{
+    int _spriteIndex;
+    int _number;
+    string _name;
+    bool _isOnline;
+
+    public int _SpriteIndex { get { return _spriteIndex; } }
+    public int _Number { get { return _number; } }
+    public string _Name { get { return _name; } }
+    public bool _IsOnline { get { return _isOnline; } }
+
+    public StudentInfo(int spriteIndex, int number, string name, bool isOnline)
+    {
+        _spriteIndex = spriteIndex;
+        _number = number;
+        _name = name;
+        _isOnline = isOnline;
+    }
+}
+
 public class TeacherMainUI : MonoBehaviour
 {
-    public enum eSchoolName
+    static TeacherMainUI _uniqueInstance;
+    public static TeacherMainUI _instance { get { return _uniqueInstance; } }
+
+    public enum eTabState
     {
-        중동고등학교,
-        휘문고등학교,
-        경기고등학교,
-        숙명여자고등학교,
+        Home,
+        Class,
+        Game,
+        Join,
+        Record,
 
         max
     }
 
     [SerializeField]
-    Dropdown _schoolListDropdown;
+    TabGroup _tabGroup;
     [SerializeField]
-    InputField _gradeInputField;
+    MyClass _myClass;
     [SerializeField]
-    InputField _groupInputField;
+    PersonalInfo _personalInfo;
+    [SerializeField]
+    ClassInfo _classInfo;
+    [SerializeField]
+    GameObject[] _tabObjArr;
+    [SerializeField]
+    BackButton _backBtn;
+
+    eTabState _currentTabState = eTabState.max;
+
+    Dictionary<int, Dictionary<int, List<StudentInfo>>> _classInfoDic = new Dictionary<int, Dictionary<int, List<StudentInfo>>>();
+
+    private void Awake()
+    {
+        _uniqueInstance = this;
+    }
 
     private void Start()
     {
-        List<string> temp = new List<string>();
+        _tabGroup.InitBtn(ChangeTab);
 
-        for (int n = 0; n < (int)eSchoolName.max; n++)
-            temp.Add(((eSchoolName)n).ToString());
+        #region Temp Init Personal Info
+        Dictionary<int, int[]> classInfoDic = new Dictionary<int, int[]>();
 
-        _schoolListDropdown.ClearOptions();
-        _schoolListDropdown.AddOptions(temp);
+        int[] groupArr = new int[5];
+        for (int n = 0; n < groupArr.Length; n++)
+            groupArr[n] = n + 1;
+        classInfoDic.Add(1, groupArr);
+
+        groupArr = new int[5];
+        for (int n = 0; n < groupArr.Length; n++)
+            groupArr[n] = n + 5;
+        classInfoDic.Add(2, groupArr);
+
+        groupArr = new int[5];
+        for (int n = 0; n < groupArr.Length; n++)
+            groupArr[n] = n + 3;
+        classInfoDic.Add(3, groupArr);
+        
+        _personalInfo.InitClasGroup("Reality_Reality", classInfoDic);
+        #endregion
+
+        List<StudentInfo> student = new List<StudentInfo>();
+        for (int n = 0; n < 20; n++)
+            student.Add(new StudentInfo(n ,n + 1, "학생" + (n + 1).ToString(), true));
+
+        Dictionary<int, List<StudentInfo>> group = new Dictionary<int, List<StudentInfo>>();
+        for (int n = 0; n < 5; n++)
+            group.Add(n + 1, student);
+
+        ChangeTab(0);
     }
 
-    public void EnterBtn()
+    void ChangeTab(int tabState)
     {
-        if(!string.IsNullOrEmpty(_gradeInputField.text) && !string.IsNullOrEmpty(_groupInputField.text))
+        if (_currentTabState == (eTabState)tabState)
+            return;
+
+        _currentTabState = (eTabState)tabState;
+        _tabGroup.ShowClickedImg(tabState);
+
+        switch ((eTabState)tabState)
         {
-            TeacherClient._instance.SendClientInfo(_schoolListDropdown.value, int.Parse(_gradeInputField.text), int.Parse(_groupInputField.text));
+            case eTabState.Home:
+                _myClass.gameObject.SetActive(false);
+                _classInfo.gameObject.SetActive(false);
+                break;
+            case eTabState.Class:
+                ShowClassTab();
+                break;
+            case eTabState.Game:
+                _myClass.gameObject.SetActive(true);
+                _classInfo.gameObject.SetActive(false);
+                break;
+            case eTabState.Join:
+                _myClass.gameObject.SetActive(false);
+                _classInfo.gameObject.SetActive(false);
+                break;
+            case eTabState.Record:
+                _myClass.gameObject.SetActive(false);
+                _classInfo.gameObject.SetActive(false);
+                break;
         }
+
+        for (int n = 0; n < _tabObjArr.Length; n++)
+        {
+            if (n == tabState)
+            {
+                _tabObjArr[n].SetActive(true);
+                continue;
+            }
+
+            _tabObjArr[n].SetActive(false);
+        }
+    }
+
+    public void GetClassInfo(int selectedClass, int selectedGroup)
+    {
+        _myClass.InitMyClass(selectedClass, selectedGroup);
+        _myClass.gameObject.SetActive(true);
+        _personalInfo.gameObject.SetActive(false);
+
+        List<StudentInfo> temp = new List<StudentInfo>();
+        for (int n = 0; n < Random.Range(18, 30); n++)
+            temp.Add(new StudentInfo(n, n + 1, "학생" + (n + 1).ToString(), true));
+        _classInfo.InitClassInfo(temp);
+
+        _classInfo.gameObject.SetActive(true);
+        _backBtn.AssignFunction(ShowClassTab);
+    }
+
+    public void AssignFunctionToBackBtn(BackButton.BackFunction function)
+    {
+        _backBtn.AssignFunction(function);
+    }
+
+    public void ShowClassTab()
+    {
+        _myClass.gameObject.SetActive(false);
+        _personalInfo.gameObject.SetActive(true);
+        _classInfo.gameObject.SetActive(false);
     }
 }
