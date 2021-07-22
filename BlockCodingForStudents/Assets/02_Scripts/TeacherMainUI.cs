@@ -53,6 +53,9 @@ public class TeacherMainUI : MonoBehaviour
     [SerializeField]
     BackButton _backBtn;
 
+    [SerializeField]
+    SelectGame _selectGame;
+
     eTabState _currentTabState = eTabState.max;
 
     Dictionary<int, Dictionary<int, List<StudentInfo>>> _classInfoDic = new Dictionary<int, Dictionary<int, List<StudentInfo>>>();
@@ -111,21 +114,25 @@ public class TeacherMainUI : MonoBehaviour
             case eTabState.Home:
                 _myClass.gameObject.SetActive(false);
                 _classInfo.gameObject.SetActive(false);
+                _personalInfo.gameObject.SetActive(false);
                 break;
             case eTabState.Class:
                 ShowClassTab();
                 break;
             case eTabState.Game:
-                _myClass.gameObject.SetActive(true);
+                _myClass.gameObject.SetActive(false);
                 _classInfo.gameObject.SetActive(false);
+                _personalInfo.gameObject.SetActive(true);
                 break;
             case eTabState.Join:
                 _myClass.gameObject.SetActive(false);
                 _classInfo.gameObject.SetActive(false);
+                _personalInfo.gameObject.SetActive(false);
                 break;
             case eTabState.Record:
                 _myClass.gameObject.SetActive(false);
                 _classInfo.gameObject.SetActive(false);
+                _personalInfo.gameObject.SetActive(false);
                 break;
         }
 
@@ -147,13 +154,43 @@ public class TeacherMainUI : MonoBehaviour
         _myClass.gameObject.SetActive(true);
         _personalInfo.gameObject.SetActive(false);
 
-        List<StudentInfo> temp = new List<StudentInfo>();
-        for (int n = 0; n < Random.Range(18, 30); n++)
-            temp.Add(new StudentInfo(n, n + 1, "학생" + (n + 1).ToString(), true));
-        _classInfo.InitClassInfo(temp);
+        switch(_currentTabState)
+        {
+            case eTabState.Class:
 
-        _classInfo.gameObject.SetActive(true);
-        _backBtn.AssignFunction(ShowClassTab);
+                List<StudentInfo> temp = new List<StudentInfo>();
+                for (int n = 0; n < Random.Range(18, 30); n++)
+                    temp.Add(new StudentInfo(n, n + 1, "학생" + (n + 1).ToString(), true));
+                _classInfo.InitClassInfo(temp);
+
+                _classInfo.gameObject.SetActive(true);
+                _backBtn.AssignFunction(ShowClassTab);
+
+                break;
+
+            case eTabState.Game:
+
+                Dictionary<int, List<int>> allGameDic = new Dictionary<int, List<int>>();
+                List<int> gameIdx = new List<int>();
+                for (int n = 0; n < Random.Range(1, 4); n++)
+                    gameIdx.Add(n);
+                allGameDic.Add(1, gameIdx);
+
+                gameIdx = new List<int>();
+                for (int n = 0; n < Random.Range(1, 4); n++)
+                    gameIdx.Add(n);
+                allGameDic.Add(2, gameIdx);
+
+                gameIdx = new List<int>();
+                for (int n = 0; n < Random.Range(1, 4); n++)
+                    gameIdx.Add(n);
+                allGameDic.Add(3, gameIdx);
+
+                _selectGame.InitSelectGame(allGameDic);
+                _selectGame.gameObject.SetActive(true);
+
+                break;
+        }
     }
 
     public void AssignFunctionToBackBtn(BackButton.BackFunction function)

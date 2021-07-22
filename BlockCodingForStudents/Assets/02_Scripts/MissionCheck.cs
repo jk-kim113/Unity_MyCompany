@@ -59,6 +59,9 @@ public class MissionCheck : MonoBehaviour
     {
         _missionCategoryObj.SetActive(true);
         _missionBoard.gameObject.SetActive(false);
+
+        if (TeacherMainUI._instance != null)
+            TeacherMainUI._instance.AssignFunctionToBackBtn(StudentInfoMenu._instance.ShowStudentInfoMenu);
     }
 
     public void ShowMissionBoard(int level, int gameIndex)

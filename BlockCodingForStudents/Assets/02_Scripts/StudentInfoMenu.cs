@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class StudentInfoMenu : MonoBehaviour
 {
+    static StudentInfoMenu _uniqueInstance;
+    public static StudentInfoMenu _instance { get { return _uniqueInstance; } }
+
     public enum eMenuState
     {
         ChangeStudentInfo,
@@ -29,6 +32,11 @@ public class StudentInfoMenu : MonoBehaviour
     GameObject _changeStudentInfo;
     [SerializeField]
     GameObject _missionCheckObj;
+
+    private void Awake()
+    {
+        _uniqueInstance = this;
+    }
 
     private void OnEnable()
     {
@@ -71,7 +79,7 @@ public class StudentInfoMenu : MonoBehaviour
         TeacherMainUI._instance.AssignFunctionToBackBtn(ShowStudentInfoMenu);
     }
 
-    void ShowStudentInfoMenu()
+    public void ShowStudentInfoMenu()
     {
         _checkListObj.SetActive(true);
         _changeStudentInfo.SetActive(false);
