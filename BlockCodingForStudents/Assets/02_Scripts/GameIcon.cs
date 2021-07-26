@@ -15,6 +15,8 @@ public class GameIcon : MonoBehaviour, IPointerClickHandler
     int _myGameIndex;
 
     GameList _myGameList;
+    bool _isOn = false;
+    public bool _IsOn { set { _isOn = value; } }
 
     private void Awake()
     {
@@ -29,7 +31,7 @@ public class GameIcon : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(_myGameList != null)
-            _myGameList.ShowActiveIcon(_activeIconPos);
+        if (_myGameList != null)
+            _myGameList.ShowActiveIcon(_activeIconPos, _isOn, _myGameIndex);
     }
 }

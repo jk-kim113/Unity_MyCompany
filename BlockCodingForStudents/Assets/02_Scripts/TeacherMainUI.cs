@@ -49,6 +49,8 @@ public class TeacherMainUI : MonoBehaviour
     [SerializeField]
     ClassInfo _classInfo;
     [SerializeField]
+    GameObject _selectGameObj;
+    [SerializeField]
     GameObject[] _tabObjArr;
     [SerializeField]
     BackButton _backBtn;
@@ -123,6 +125,7 @@ public class TeacherMainUI : MonoBehaviour
                 _myClass.gameObject.SetActive(false);
                 _classInfo.gameObject.SetActive(false);
                 _personalInfo.gameObject.SetActive(true);
+                _selectGameObj.SetActive(false);
                 break;
             case eTabState.Join:
                 _myClass.gameObject.SetActive(false);
@@ -203,5 +206,14 @@ public class TeacherMainUI : MonoBehaviour
         _myClass.gameObject.SetActive(false);
         _personalInfo.gameObject.SetActive(true);
         _classInfo.gameObject.SetActive(false);
+    }
+
+    public void ExitProgram()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

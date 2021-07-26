@@ -267,7 +267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelTxt: {fileID: 7169554682694938944}
   _scrollTarget: {fileID: 7169554682725117176}
-  _activeIconObj: {fileID: 7169554681013264029}
+  _activeIcon: {fileID: 7169554681013264025}
 --- !u!1 &7169554681399517817
 GameObject:
   m_ObjectHideFlags: 0

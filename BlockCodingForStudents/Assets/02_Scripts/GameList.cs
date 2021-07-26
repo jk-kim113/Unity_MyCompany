@@ -10,12 +10,21 @@ public class GameList : MonoBehaviour
     [SerializeField]
     Transform _scrollTarget;
     [SerializeField]
-    GameObject _activeIconObj;
+    GameActiveIcon _activeIcon;
 
+    int _myIndex;
     List<GameIcon> _gameIconList = new List<GameIcon>();
+
+    int _selectedGameIndex;
+
+    private void OnEnable()
+    {
+        _activeIcon.gameObject.SetActive(false);
+    }
 
     public void InitGameList(int level, List<int> gameIndexList, GameObject gameIconPrefab) 
     {
+        _myIndex = level;
         _levelTxt.text = level.ToString();
 
         if(gameIndexList.Count > _gameIconList.Count)
@@ -51,9 +60,24 @@ public class GameList : MonoBehaviour
         }
     }
 
-    public void ShowActiveIcon(Transform showPos)
+    public void ShowActiveIcon(Transform showPos, bool isOn, int gameIndex)
     {
-        _activeIconObj.transform.position = showPos.position;
-        _activeIconObj.SetActive(true);
+        _selectedGameIndex = gameIndex;
+
+        _activeIcon.gameObject.transform.position = showPos.position;
+        _activeIcon.InitGameActiveIcon(isOn, this);
+        _activeIcon.gameObject.SetActive(true);
+
+        SelectGame._instance.InformActiveList(_myIndex);
+    }
+
+    public void OffActiveIcon()
+    {
+        _activeIcon.gameObject.SetActive(false);
+    }
+
+    public void OnOffGame(bool isOn)
+    {
+        _gameIconList[_selectedGameIndex]._IsOn = isOn;
     }
 }

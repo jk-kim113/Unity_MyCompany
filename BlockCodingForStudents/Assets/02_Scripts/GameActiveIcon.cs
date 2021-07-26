@@ -17,19 +17,21 @@ public class GameActiveIcon : MonoBehaviour
     bool _isCurrentGameOn;
     public bool _IsCurrentGameOn { set { _isCurrentGameOn = value; } }
 
+    GameList _myGamList;
+
     private void Start()
     {
         _downloadBtn.onClick.AddListener(() => { DownloadGame(); });
         _activeBtn.onClick.AddListener(() => { ActiveGame(); });
         _currentOnBtn.onClick.AddListener(() => { OnOffGame(); });
         _currentOffBtn.onClick.AddListener(() => { OnOffGame(); });
-
-        //temp
-        InitGameActiveIcon(true);
     }
 
-    public void InitGameActiveIcon(bool isCurrentGameOn)
+    public void InitGameActiveIcon(bool isCurrentGameOn, GameList myGameList)
     {
+        if (_myGamList == null)
+            _myGamList = myGameList;
+
         _isCurrentGameOn = isCurrentGameOn;
         _currentOnBtn.gameObject.SetActive(isCurrentGameOn);
         _currentOffBtn.gameObject.SetActive(!isCurrentGameOn);
@@ -43,6 +45,7 @@ public class GameActiveIcon : MonoBehaviour
         _isCurrentGameOn = !_isCurrentGameOn;
 
         // Send Info OnOff
+        _myGamList.OnOffGame(_isCurrentGameOn);
     }
 
     public void DownloadGame()
