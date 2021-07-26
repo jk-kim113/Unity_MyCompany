@@ -51,6 +51,8 @@ public class GameActiveIcon : MonoBehaviour
     public void DownloadGame()
     {
         Debug.Log("Download");
+
+        _myGamList.DownloadGame();
     }
 
     public void ActiveGame()

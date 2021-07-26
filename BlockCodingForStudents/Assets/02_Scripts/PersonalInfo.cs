@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PersonalInfo : MonoBehaviour
 {
+    static PersonalInfo _uniqueInstance;
+    public static PersonalInfo _instance { get { return _uniqueInstance; } }
+
     [SerializeField]
     Text _peronalIDText;
     [SerializeField]
@@ -16,11 +19,22 @@ public class PersonalInfo : MonoBehaviour
 
     Dictionary<int, ClassContent> _classInfoDic = new Dictionary<int, ClassContent>();
 
-    public void InitClasGroup(string personalID, Dictionary<int, int[]> classInfoDic)
+    private void Awake()
+    {
+        _uniqueInstance = this;
+    }
+
+    public void InitClasGroup(string personalID, Dictionary<int, List<int>> classInfoDic)
     {
         _peronalIDText.text = personalID;
         foreach(int key in classInfoDic.Keys)
-            CreateClassContent(key, classInfoDic[key]);
+        {
+            int[] temp = new int[classInfoDic[key].Count];
+            for(int n = 0; n < temp.Length; n++)
+                temp[n] = classInfoDic[key][n];
+
+            CreateClassContent(key, temp);
+        }   
     }
 
     public void AddClassGroup(int classNum, int groupNum)

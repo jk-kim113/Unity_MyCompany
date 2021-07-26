@@ -10,6 +10,9 @@ public class TeacherClient : MonoBehaviour
     static TeacherClient _uniqueInstance;
     public static TeacherClient _instance { get { return _uniqueInstance; } }
 
+    [SerializeField]
+    JoinStudent _joinStudent;
+
     const string _ip = "192.168.0.52";
     //const string _ip = "203.248.252.2";
     const int _port = 4578;
@@ -21,6 +24,8 @@ public class TeacherClient : MonoBehaviour
     Queue<DefinedStructure.PacketInfo> _toClientQueue = new Queue<DefinedStructure.PacketInfo>();
     Queue<byte[]> _fromClientQueue = new Queue<byte[]>();
 
+    Dictionary<int, List<int>> _classInfoDic = new Dictionary<int, List<int>>();
+
     private void Awake()
     {
         _uniqueInstance = this;
@@ -28,7 +33,8 @@ public class TeacherClient : MonoBehaviour
 
     private void Start()
     {
-        //ConnectServer();
+        ConnectServer();
+        SendManagerInfo();
     }
 
     public void ConnectServer()
@@ -100,10 +106,51 @@ public class TeacherClient : MonoBehaviour
             {
                 DefinedStructure.PacketInfo pToClient = _toClientQueue.Dequeue();
 
-                //switch ((DefinedProtocol.eToClient)pToClient._id)
-                //{
-                    
-                //}
+                switch ((DefinedProtocol.eToClient)pToClient._id)
+                {
+                    case DefinedProtocol.eToClient.ClassInfo:
+
+                        DefinedStructure.P_ClassInfo pClassInfo = new DefinedStructure.P_ClassInfo();
+                        pClassInfo = (DefinedStructure.P_ClassInfo)ConvertPacket.ByteArrayToStructure(pToClient._data, pClassInfo.GetType(), pToClient._totalSize);
+                        
+                        if(_classInfoDic.ContainsKey(pClassInfo._grade))
+                            _classInfoDic[pClassInfo._grade].Add(pClassInfo._group);
+                        else
+                        {
+                            List<int> groupList = new List<int>();
+                            groupList.Add(pClassInfo._group);
+                            _classInfoDic.Add(pClassInfo._grade, groupList);
+                        }
+
+                        break;
+
+                    case DefinedProtocol.eToClient.StudentInfo:
+
+                        DefinedStructure.P_StudentInfo pStudentInfo = new DefinedStructure.P_StudentInfo();
+                        pStudentInfo = (DefinedStructure.P_StudentInfo)ConvertPacket.ByteArrayToStructure(pToClient._data, pStudentInfo.GetType(), pToClient._totalSize);
+
+                        _joinStudent.AddStudent(1, "일반 학생", "리얼고등학교", pStudentInfo._grade, pStudentInfo._group, pStudentInfo._number, "홍길동");
+
+                        break;
+
+                    case DefinedProtocol.eToClient.FinishSend:
+
+                        DefinedStructure.P_FinishSend pFinishSend = new DefinedStructure.P_FinishSend();
+                        pFinishSend = (DefinedStructure.P_FinishSend)ConvertPacket.ByteArrayToStructure(pToClient._data, pFinishSend.GetType(), pToClient._totalSize);
+                        
+                        switch((DefinedProtocol.eToClient)pFinishSend._kind)
+                        {
+                            case DefinedProtocol.eToClient.ClassInfo:
+                                while(PersonalInfo._instance == null)
+                                {
+                                    yield return null;
+                                }
+                                PersonalInfo._instance.InitClasGroup("Reality_Reality", _classInfoDic);
+                                break;
+                        }
+
+                        break;
+                }
             }
 
             yield return null;
@@ -121,14 +168,24 @@ public class TeacherClient : MonoBehaviour
         }
     }
 
-    public void SendClientInfo(int schoolID, int grade, int group)
+    public void SendDownloadInfo(int gameIndex, int level)
     {
-        DefinedStructure.P_ClientInfo pClientInfo;
-        pClientInfo._schoolID = schoolID + 100000;
-        pClientInfo._grade = grade;
-        pClientInfo._group = group;
+        DefinedStructure.P_DownGameInfo pDownloadGameInfo;
+        pDownloadGameInfo._gameIndex = gameIndex;
+        pDownloadGameInfo._level = level;
 
-        ToPacket(DefinedProtocol.eFromClient.ClientInfo, pClientInfo);
+        Debug.Log(gameIndex);
+        Debug.Log(level);
+
+        ToPacket(DefinedProtocol.eFromClient.DownloadInfo, pDownloadGameInfo);
+    }
+
+    void SendManagerInfo()
+    {
+        DefinedStructure.P_ManagerInfo pManagerInfo;
+        pManagerInfo._managerID = 1;
+
+        ToPacket(DefinedProtocol.eFromClient.ManagerInfo, pManagerInfo);
     }
 
     void ToPacket(DefinedProtocol.eFromClient fromClientID, object str)

@@ -17,13 +17,45 @@ public class DefinedStructure
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct P_ClientInfo
+    public struct P_ManagerInfo
     {
         [MarshalAs(UnmanagedType.I4)]
-        public int _schoolID;
+        public int _managerID;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_ClassInfo
+    {
         [MarshalAs(UnmanagedType.I4)]
         public int _grade;
         [MarshalAs(UnmanagedType.I4)]
         public int _group;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_StudentInfo
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        public int _grade;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _group;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _number;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_FinishSend
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        public int _kind;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_DownGameInfo
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        public int _gameIndex;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _level;
     }
 }

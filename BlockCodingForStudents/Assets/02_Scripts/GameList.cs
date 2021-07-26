@@ -15,6 +15,7 @@ public class GameList : MonoBehaviour
     int _myIndex;
     List<GameIcon> _gameIconList = new List<GameIcon>();
 
+    int _selectedOderIndex;
     int _selectedGameIndex;
 
     private void OnEnable()
@@ -34,13 +35,13 @@ public class GameList : MonoBehaviour
                 if(n < _gameIconList.Count)
                 {
                     GameIcon gameIcon = _gameIconList[n];
-                    gameIcon.InitGameIcon(gameIndexList[n], this);
+                    gameIcon.InitGameIcon(gameIndexList[n], this, n);
                     gameIcon.gameObject.SetActive(true);
                 }
                 else
                 {
                     GameIcon gameIcon = Instantiate(gameIconPrefab, _scrollTarget).GetComponent<GameIcon>();
-                    gameIcon.InitGameIcon(gameIndexList[n], this);
+                    gameIcon.InitGameIcon(gameIndexList[n], this, n);
                     _gameIconList.Add(gameIcon);
                 }
             }
@@ -52,7 +53,7 @@ public class GameList : MonoBehaviour
                 if (n < gameIndexList.Count)
                 {
                     GameIcon gameIcon = _gameIconList[n];
-                    gameIcon.InitGameIcon(gameIndexList[n], this);
+                    gameIcon.InitGameIcon(gameIndexList[n], this, n);
                 }
                 else
                     _gameIconList[n].gameObject.SetActive(false);
@@ -60,8 +61,9 @@ public class GameList : MonoBehaviour
         }
     }
 
-    public void ShowActiveIcon(Transform showPos, bool isOn, int gameIndex)
+    public void ShowActiveIcon(Transform showPos, bool isOn, int orderIndex, int gameIndex)
     {
+        _selectedOderIndex = orderIndex;
         _selectedGameIndex = gameIndex;
 
         _activeIcon.gameObject.transform.position = showPos.position;
@@ -78,6 +80,11 @@ public class GameList : MonoBehaviour
 
     public void OnOffGame(bool isOn)
     {
-        _gameIconList[_selectedGameIndex]._IsOn = isOn;
+        _gameIconList[_selectedOderIndex]._IsOn = isOn;
+    }
+
+    public void DownloadGame()
+    {
+        TeacherClient._instance.SendDownloadInfo(_selectedGameIndex, _myIndex);
     }
 }

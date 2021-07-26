@@ -785,6 +785,10 @@ MonoBehaviour:
   - {fileID: 412674399}
   _backBtn: {fileID: 1306451050}
   _selectGame: {fileID: 1409851007}
+  _gameIconArr:
+  - {fileID: 21300000, guid: d0ff307938b0a2644951093b8287bd5a, type: 3}
+  - {fileID: 21300000, guid: 502fdbb56f9e95c4b912becc740bac18, type: 3}
+  - {fileID: 21300000, guid: 2e48fc5ee72d907458c15d7e1de78df8, type: 3}
 --- !u!1 &101319770
 GameObject:
   m_ObjectHideFlags: 0
@@ -3367,6 +3371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a56440e97453c0344b2550141a256e46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _joinStudent: {fileID: 101319772}
 --- !u!1 &901946175
 GameObject:
   m_ObjectHideFlags: 0
@@ -4977,7 +4982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1409851006
 RectTransform:
   m_ObjectHideFlags: 0

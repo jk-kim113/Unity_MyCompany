@@ -58,6 +58,11 @@ public class TeacherMainUI : MonoBehaviour
     [SerializeField]
     SelectGame _selectGame;
 
+    [SerializeField]
+    Sprite[] _gameIconArr;
+
+    public Sprite[] _GameIconArr { get { return _gameIconArr; } }
+
     eTabState _currentTabState = eTabState.max;
 
     Dictionary<int, Dictionary<int, List<StudentInfo>>> _classInfoDic = new Dictionary<int, Dictionary<int, List<StudentInfo>>>();
@@ -70,27 +75,6 @@ public class TeacherMainUI : MonoBehaviour
     private void Start()
     {
         _tabGroup.InitBtn(ChangeTab);
-
-        #region Temp Init Personal Info
-        Dictionary<int, int[]> classInfoDic = new Dictionary<int, int[]>();
-
-        int[] groupArr = new int[5];
-        for (int n = 0; n < groupArr.Length; n++)
-            groupArr[n] = n + 1;
-        classInfoDic.Add(1, groupArr);
-
-        groupArr = new int[5];
-        for (int n = 0; n < groupArr.Length; n++)
-            groupArr[n] = n + 5;
-        classInfoDic.Add(2, groupArr);
-
-        groupArr = new int[5];
-        for (int n = 0; n < groupArr.Length; n++)
-            groupArr[n] = n + 3;
-        classInfoDic.Add(3, groupArr);
-        
-        _personalInfo.InitClasGroup("Reality_Reality", classInfoDic);
-        #endregion
 
         List<StudentInfo> student = new List<StudentInfo>();
         for (int n = 0; n < 20; n++)
@@ -161,10 +145,10 @@ public class TeacherMainUI : MonoBehaviour
         {
             case eTabState.Class:
 
-                List<StudentInfo> temp = new List<StudentInfo>();
-                for (int n = 0; n < Random.Range(18, 30); n++)
-                    temp.Add(new StudentInfo(n, n + 1, "학생" + (n + 1).ToString(), true));
-                _classInfo.InitClassInfo(temp);
+                //List<StudentInfo> temp = new List<StudentInfo>();
+                //for (int n = 0; n < Random.Range(10, 16); n++)
+                //    temp.Add(new StudentInfo(n, n + 1, "학생" + (n + 1).ToString(), true));
+                //_classInfo.InitClassInfo(temp);
 
                 _classInfo.gameObject.SetActive(true);
                 _backBtn.AssignFunction(ShowClassTab);
@@ -174,20 +158,15 @@ public class TeacherMainUI : MonoBehaviour
             case eTabState.Game:
 
                 Dictionary<int, List<int>> allGameDic = new Dictionary<int, List<int>>();
+
                 List<int> gameIdx = new List<int>();
-                for (int n = 0; n < Random.Range(1, 4); n++)
-                    gameIdx.Add(n);
+                gameIdx.Add(0);
+                gameIdx.Add(2);
                 allGameDic.Add(1, gameIdx);
 
                 gameIdx = new List<int>();
-                for (int n = 0; n < Random.Range(1, 4); n++)
-                    gameIdx.Add(n);
+                gameIdx.Add(1);
                 allGameDic.Add(2, gameIdx);
-
-                gameIdx = new List<int>();
-                for (int n = 0; n < Random.Range(1, 4); n++)
-                    gameIdx.Add(n);
-                allGameDic.Add(3, gameIdx);
 
                 _selectGame.InitSelectGame(allGameDic);
                 _selectGame.gameObject.SetActive(true);

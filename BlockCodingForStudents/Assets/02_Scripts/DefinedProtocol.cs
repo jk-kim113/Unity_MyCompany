@@ -6,14 +6,18 @@ public class DefinedProtocol
 {
     public enum eFromClient
     {
-        ClientInfo, 
+        ManagerInfo,
+        DownloadInfo,
 
         max
     }
 
     public enum eToClient
     {
-        
+        ClassInfo,
+        StudentInfo,
+        FinishSend,
+
         max
     }
 }
