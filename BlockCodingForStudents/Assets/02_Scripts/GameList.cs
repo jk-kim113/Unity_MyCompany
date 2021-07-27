@@ -81,6 +81,7 @@ public class GameList : MonoBehaviour
     public void OnOffGame(bool isOn)
     {
         _gameIconList[_selectedOderIndex]._IsOn = isOn;
+        TeacherClient._instance.SendOnOffGame(_selectedGameIndex, _myIndex, isOn);
     }
 
     public void DownloadGame()

@@ -44,14 +44,11 @@ public class GameActiveIcon : MonoBehaviour
 
         _isCurrentGameOn = !_isCurrentGameOn;
 
-        // Send Info OnOff
         _myGamList.OnOffGame(_isCurrentGameOn);
     }
 
     public void DownloadGame()
     {
-        Debug.Log("Download");
-
         _myGamList.DownloadGame();
     }
 

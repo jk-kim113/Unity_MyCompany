@@ -76,6 +76,24 @@ public class TeacherMainUI : MonoBehaviour
     {
         _tabGroup.InitBtn(ChangeTab);
 
+        Dictionary<int, List<int>> classInfoDic = new Dictionary<int, List<int>>();
+
+        List<int> groupList = new List<int>();
+        for (int n = 0; n < 5; n++)
+            groupList.Add(n + 1);
+        classInfoDic.Add(1, groupList);
+
+        groupList = new List<int>();
+        for (int n = 0; n < 2; n++)
+            groupList.Add(n + 5);
+        classInfoDic.Add(2, groupList);
+
+        groupList = new List<int>();
+        for (int n = 0; n < 4; n++)
+            groupList.Add(n + 3);
+        classInfoDic.Add(3, groupList);
+        _personalInfo.InitClasGroup("Reality_Reality", classInfoDic);
+
         List<StudentInfo> student = new List<StudentInfo>();
         for (int n = 0; n < 20; n++)
             student.Add(new StudentInfo(n ,n + 1, "학생" + (n + 1).ToString(), true));
@@ -145,10 +163,10 @@ public class TeacherMainUI : MonoBehaviour
         {
             case eTabState.Class:
 
-                //List<StudentInfo> temp = new List<StudentInfo>();
-                //for (int n = 0; n < Random.Range(10, 16); n++)
-                //    temp.Add(new StudentInfo(n, n + 1, "학생" + (n + 1).ToString(), true));
-                //_classInfo.InitClassInfo(temp);
+                List<StudentInfo> temp = new List<StudentInfo>();
+                for (int n = 0; n < Random.Range(10, 16); n++)
+                    temp.Add(new StudentInfo(n, n + 1, "학생" + (n + 1).ToString(), true));
+                _classInfo.InitClassInfo(temp);
 
                 _classInfo.gameObject.SetActive(true);
                 _backBtn.AssignFunction(ShowClassTab);

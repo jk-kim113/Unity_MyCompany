@@ -174,10 +174,17 @@ public class TeacherClient : MonoBehaviour
         pDownloadGameInfo._gameIndex = gameIndex;
         pDownloadGameInfo._level = level;
 
-        Debug.Log(gameIndex);
-        Debug.Log(level);
-
         ToPacket(DefinedProtocol.eFromClient.DownloadInfo, pDownloadGameInfo);
+    }
+
+    public void SendOnOffGame(int gameIndex, int level, bool isOn)
+    {
+        DefinedStructure.P_OnOffGameInfo pOnOffGameInfo;
+        pOnOffGameInfo._gameIndex = gameIndex;
+        pOnOffGameInfo._level = level;
+        pOnOffGameInfo._isOn = isOn ? 0 : 1;
+
+        ToPacket(DefinedProtocol.eFromClient.OnOffInfo, pOnOffGameInfo);
     }
 
     void SendManagerInfo()

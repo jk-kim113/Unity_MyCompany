@@ -8,6 +8,7 @@ public class DefinedProtocol
     {
         ManagerInfo,
         DownloadInfo,
+        OnOffInfo,
 
         max
     }

@@ -58,4 +58,15 @@ public class DefinedStructure
         [MarshalAs(UnmanagedType.I4)]
         public int _level;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct P_OnOffGameInfo
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        public int _gameIndex;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _level;
+        [MarshalAs(UnmanagedType.I4)]
+        public int _isOn;
+    }
 }
